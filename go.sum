@@ -1,7 +1,7 @@
-github.com/ymz-ncnk/musgen v0.1.4 h1:Vhstrp++lJxHEoyklgHHE1UK/B/MX+8rBrLJdEWq7Sw=
-github.com/ymz-ncnk/musgen v0.1.4/go.mod h1:WVBDHghk3lkuPc+xPVnxH6nY8cU5aOiR1yAo1kbumks=
-github.com/ymz-ncnk/musgo v0.1.4 h1:HuSye80R10gyzquT2LwhHVqgCSwjbRoGs7epzqFRvKQ=
-github.com/ymz-ncnk/musgo v0.1.4/go.mod h1:4PfxaiCWFiBTAV6steoIfS3B1vsfZf94TXit7ksOsWw=
+github.com/ymz-ncnk/musgen v0.1.5 h1:yfB4K/24AcKr4sIrwr/qbGBVFNVaty31Zlve1hBtx4I=
+github.com/ymz-ncnk/musgen v0.1.5/go.mod h1:WVBDHghk3lkuPc+xPVnxH6nY8cU5aOiR1yAo1kbumks=
+github.com/ymz-ncnk/musgo v0.1.5 h1:15T7glF5/VgtT3sGqQY1ggHg2s/f1wSNOm6ljI/0cOM=
+github.com/ymz-ncnk/musgo v0.1.5/go.mod h1:KRRK+5xUdqza78dQm31gf1C4+X9k9gHEWqQiTpkmQbI=
 github.com/yuin/goldmark v1.3.5/go.mod h1:mwnBkeHKe2W/ZEtQ+71ViKU8L12m81fl3OWwC1Zlc8k=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
