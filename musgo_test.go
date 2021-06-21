@@ -7,6 +7,7 @@ import (
 
 	"github.com/ymz-ncnk/musgo/errs"
 	"github.com/ymz-ncnk/musgotest/pkg"
+	mypkg "github.com/ymz-ncnk/musgotest/pkgpath"
 )
 
 func TestEquality(t *testing.T) {
@@ -75,6 +76,20 @@ func TestMapFieldValidation(t *testing.T) {
 	}
 	if fieldErr.Cause() != pkg.ErrElementsSumBiggerThenTen {
 		t.Error("wrong cause")
+	}
+}
+
+func TestSuffix(t *testing.T) {
+	mb := mypkg.MyByte(3)
+	buf := make([]byte, mb.SizeAMUS())
+	mb.MarshalAMUS(buf)
+	var amb mypkg.MyByte
+	_, err := amb.UnmarshalAMUS(buf)
+	if err != nil {
+		t.Error(err)
+	}
+	if mb != amb {
+		t.Error("something went wrong")
 	}
 }
 

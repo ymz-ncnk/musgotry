@@ -25,7 +25,7 @@ func (v MyInnerStruct) MarshalMUS(buf []byte) int {
 				i++
 			}
 		}
-		i += copy(buf[i:], []byte(v.Str))
+		i += copy(buf[i:], v.Str)
 	}
 	return i
 }
@@ -56,7 +56,7 @@ func (v *MyInnerStruct) UnmarshalMUS(buf []byte) (int, error) {
 					shift := 0
 					done := false
 					for l, b := range buf[i:] {
-						if l > 9 || l == 9 && b > 1 {
+						if l == 9 && b > 1 {
 							return i, errs.ErrOverflow
 						}
 						if b < 0x80 {

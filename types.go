@@ -8,7 +8,8 @@ import (
 )
 
 // ErrInvalidInnerStruct is an ValidateInnerStruct validator error.
-var ErrInvalidInnerStruct = errors.New("Number and Str have the same value")
+var ErrInvalidInnerStruct = errors.New("fields Number and Str have the same " +
+	"value")
 
 // For this structure, we want to add MUS format support. To do this, all
 // custom types of this structure should support the MUS format too.

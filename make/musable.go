@@ -8,6 +8,7 @@ import (
 	"github.com/ymz-ncnk/musgo"
 	"github.com/ymz-ncnk/musgotest"
 	"github.com/ymz-ncnk/musgotest/pkg"
+	mypkg "github.com/ymz-ncnk/musgotest/pkgpath"
 )
 
 // main adds MUS format support for MyStruct. Note, generated files should be
@@ -27,8 +28,14 @@ func main() {
 	}
 	{
 		var v pkg.MyMap
-		err := musGo.GenerateAliasAs(reflect.TypeOf(v), false, "ValidateMyMap",
-			3, "validators.NotHello", "validators.NotHello", "./pkg", "")
+		conf := musgo.NewAliasConf()
+		conf.T = reflect.TypeOf(v)
+		conf.Validator = "ValidateMyMap"
+		conf.MaxLength = 3
+		conf.ElemValidator = "validators.NotHello"
+		conf.KeyValidator = "validators.NotHello"
+		conf.Path = "./pkg"
+		err := musGo.GenerateAliasAs(conf)
 		if err != nil {
 			panic(err)
 		}
@@ -43,8 +50,36 @@ func main() {
 	{
 		var v pkg.MyInt
 		// Specifies validator for the alias type.
-		err := musGo.GenerateAliasAs(reflect.TypeOf(v), false, "ValidateMyInt",
-			0, "", "", "./pkg", "")
+		conf := musgo.NewAliasConf()
+		conf.T = reflect.TypeOf(v)
+		conf.Validator = "ValidateMyInt"
+		conf.Path = "./pkg"
+		err := musGo.GenerateAliasAs(conf)
+		if err != nil {
+			panic(err)
+		}
+	}
+	{
+		// In this case the pkg name differs from the last folder of the pkg path.
+		var v mypkg.MyByte
+		conf := musgo.NewConf()
+		conf.T = reflect.TypeOf(v)
+		conf.Path = "./pkgpath"
+		err := musGo.GenerateAs(conf)
+		if err != nil {
+			panic(err)
+		}
+	}
+	{
+		// In this case the pkg name differs from the last folder of the pkg path.
+		var v mypkg.MyByte
+		conf := musgo.NewConf()
+		conf.T = reflect.TypeOf(v)
+		conf.Suffix = "AMUS"
+		conf.Path = "./pkgpath"
+		conf.Filename = "CustomSuffixMyByte.musgen.go"
+		// err := musGo.GenerateAs(reflect.TypeOf(v), false, "./pkgpath", "")
+		err := musGo.GenerateAs(conf)
 		if err != nil {
 			panic(err)
 		}

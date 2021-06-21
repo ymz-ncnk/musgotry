@@ -36,7 +36,7 @@ func (v MyMap) MarshalMUS(buf []byte) int {
 						i++
 					}
 				}
-				i += copy(buf[i:], []byte(ke))
+				i += copy(buf[i:], ke)
 			}
 			{
 				length := len(vl)
@@ -52,7 +52,7 @@ func (v MyMap) MarshalMUS(buf []byte) int {
 						i++
 					}
 				}
-				i += copy(buf[i:], []byte(vl))
+				i += copy(buf[i:], vl)
 			}
 		}
 	}
@@ -73,7 +73,7 @@ func (v *MyMap) UnmarshalMUS(buf []byte) (int, error) {
 					shift := 0
 					done := false
 					for l, b := range buf[i:] {
-						if l > 9 || l == 9 && b > 1 {
+						if l == 9 && b > 1 {
 							return i, errs.ErrOverflow
 						}
 						if b < 0x80 {
@@ -114,7 +114,7 @@ func (v *MyMap) UnmarshalMUS(buf []byte) (int, error) {
 								shift := 0
 								done := false
 								for l, b := range buf[i:] {
-									if l > 9 || l == 9 && b > 1 {
+									if l == 9 && b > 1 {
 										return i, errs.ErrOverflow
 									}
 									if b < 0x80 {
@@ -159,7 +159,7 @@ func (v *MyMap) UnmarshalMUS(buf []byte) (int, error) {
 								shift := 0
 								done := false
 								for l, b := range buf[i:] {
-									if l > 9 || l == 9 && b > 1 {
+									if l == 9 && b > 1 {
 										return i, errs.ErrOverflow
 									}
 									if b < 0x80 {
@@ -196,7 +196,7 @@ func (v *MyMap) UnmarshalMUS(buf []byte) (int, error) {
 				(*v)[kem] = vlm
 			}
 			if err == nil {
-				err = ValidateMyMap((*v))
+				err = ValidateMyMap(v)
 			}
 		}
 	}

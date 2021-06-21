@@ -31,7 +31,7 @@ func (v *MyInt) UnmarshalMUS(buf []byte) (int, error) {
 				shift := 0
 				done := false
 				for l, b := range buf[i:] {
-					if l > 9 || l == 9 && b > 1 {
+					if l == 9 && b > 1 {
 						return i, errs.ErrOverflow
 					}
 					if b < 0x80 {
@@ -50,7 +50,7 @@ func (v *MyInt) UnmarshalMUS(buf []byte) (int, error) {
 		}
 		uv = (uv >> 1) ^ uint64((int(uv&1)<<63)>>63)
 		(*v) = MyInt(uv)
-		err = ValidateMyInt((*v))
+		err = ValidateMyInt(v)
 	}
 	return i, err
 }

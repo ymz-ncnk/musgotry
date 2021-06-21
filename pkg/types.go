@@ -13,14 +13,14 @@ type MyInt int
 type MyMap map[string]string
 
 // Validator of the MyInt type.
-func ValidateMyInt(number MyInt) error {
-	return validators.BiggerThenTen(int(number))
+func ValidateMyInt(number *MyInt) error {
+	return validators.BiggerThenTen(int(*number))
 }
 
 // Validator of the MyMap type.
-func ValidateMyMap(sl MyMap) error {
+func ValidateMyMap(sl *MyMap) error {
 	sum := 0
-	for _, el := range sl {
+	for _, el := range *sl {
 		n, err := strconv.Atoi(el)
 		if err == nil {
 			sum += n
