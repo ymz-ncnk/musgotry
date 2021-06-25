@@ -11,8 +11,9 @@ import (
 var ErrInvalidInnerStruct = errors.New("fields Number and Str have the same " +
 	"value")
 
-// For this structure, we want to add MUS format support. To do this, all
-// custom types of this structure should support the MUS format too.
+// MyStruct is a custom structure. We want to add a MUS format support for it.
+// To do this, all custom types of this structure should support the MUS format
+// too.
 type MyStruct struct {
 	// ValidateInnerStruct function will receive a pointer.
 	*MyInnerStruct `mus:"ValidateInnerStruct"`
@@ -29,12 +30,14 @@ type MyStruct struct {
 	number *int
 }
 
+// MyInnerStruct is a custom structure. It's a part of the MyStruct.
 type MyInnerStruct struct {
 	// Note, pkg.MyInt is from an another package.
 	Number pkg.MyInt
 	Str    string
 }
 
+// NewMyStruct returns a new MyStruct.
 func NewMyStruct(ist *MyInnerStruct, m pkg.MyMap, str string,
 	number *int) MyStruct {
 	return MyStruct{
@@ -45,7 +48,7 @@ func NewMyStruct(ist *MyInnerStruct, m pkg.MyMap, str string,
 	}
 }
 
-// Validator of the InnerStruct type.
+// ValidateInnerStruct validates MyInnerStruct.
 func ValidateInnerStruct(st *MyInnerStruct) error {
 	n, err := strconv.Atoi(st.Str)
 	if err != nil {

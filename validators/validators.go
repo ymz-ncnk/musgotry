@@ -12,6 +12,7 @@ var ErrBiggerThenTen = errors.New("bigger then ten")
 // "hello".
 var ErrHelloString = errors.New("hello string")
 
+// BiggerThenTen checks if number is bigger then ten.
 func BiggerThenTen(number int) error {
 	if number > 10 {
 		return ErrBiggerThenTen
@@ -19,6 +20,7 @@ func BiggerThenTen(number int) error {
 	return nil
 }
 
+// NotHello checks if str is equal to "hello".
 func NotHello(str string) error {
 	if str == "hello" {
 		return ErrHelloString
