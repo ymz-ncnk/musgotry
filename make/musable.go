@@ -21,7 +21,7 @@ func main() {
 	}
 	{
 		var v musgotest.MyStruct
-		err := musGo.Generate(reflect.TypeOf(v), false)
+		err := musGo.Generate(reflect.TypeOf(v), true)
 		if err != nil {
 			panic(err)
 		}

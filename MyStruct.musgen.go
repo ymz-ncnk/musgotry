@@ -1,6 +1,8 @@
 package musgotest
 
 import (
+	"unsafe"
+
 	"github.com/ymz-ncnk/musgo/errs"
 	"github.com/ymz-ncnk/musgotest/pkg"
 )
@@ -17,7 +19,12 @@ func (v MyStruct) MarshalMUS(buf []byte) int {
 		i += si
 	}
 	{
-		uv := uint64((*v.number)<<1) ^ uint64((*v.number)>>63)
+		uv := uint64((*v.number))
+		if (*v.number) < 0 {
+			uv = ^(uv << 1)
+		} else {
+			uv = uv << 1
+		}
 		{
 			for uv >= 0x80 {
 				buf[i] = byte(uv) | 0x80
@@ -26,6 +33,12 @@ func (v MyStruct) MarshalMUS(buf []byte) int {
 			}
 			buf[i] = byte(uv)
 			i++
+		}
+	}
+	{
+		{
+			*(*int64)(unsafe.Pointer(&buf[i])) = v.time
+			i += 8
 		}
 	}
 	return i
@@ -87,11 +100,27 @@ func (v *MyStruct) UnmarshalMUS(buf []byte) (int, error) {
 				return i, errs.ErrSmallBuf
 			}
 		}
-		uv = (uv >> 1) ^ uint64((int(uv&1)<<63)>>63)
+		if uv&1 == 1 {
+			uv = ^(uv >> 1)
+		} else {
+			uv = uv >> 1
+		}
 		(*v.number) = int(uv)
 	}
 	if err != nil {
 		return i, errs.NewFieldError("number", err)
+	}
+	{
+		{
+			if len(buf) < 8 {
+				return i, errs.ErrSmallBuf
+			}
+			v.time = *(*int64)(unsafe.Pointer(&buf[i]))
+			i += 8
+		}
+	}
+	if err != nil {
+		return i, errs.NewFieldError("time", err)
 	}
 	return i, err
 }
@@ -115,6 +144,12 @@ func (v MyStruct) SizeMUS() int {
 				size++
 			}
 			size++
+		}
+	}
+	{
+		{
+			_ = v.time
+			size += 8
 		}
 	}
 	return size

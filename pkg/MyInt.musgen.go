@@ -6,7 +6,12 @@ import "github.com/ymz-ncnk/musgo/errs"
 func (v MyInt) MarshalMUS(buf []byte) int {
 	i := 0
 	{
-		uv := uint64(v<<1) ^ uint64(v>>63)
+		uv := uint64(v)
+		if v < 0 {
+			uv = ^(uv << 1)
+		} else {
+			uv = uv << 1
+		}
 		{
 			for uv >= 0x80 {
 				buf[i] = byte(uv) | 0x80
@@ -49,7 +54,11 @@ func (v *MyInt) UnmarshalMUS(buf []byte) (int, error) {
 				return i, errs.ErrSmallBuf
 			}
 		}
-		uv = (uv >> 1) ^ uint64((int(uv&1)<<63)>>63)
+		if uv&1 == 1 {
+			uv = ^(uv >> 1)
+		} else {
+			uv = uv >> 1
+		}
 		(*v) = MyInt(uv)
 		err = ValidateMyInt(v)
 	}

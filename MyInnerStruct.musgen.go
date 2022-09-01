@@ -15,7 +15,12 @@ func (v MyInnerStruct) MarshalMUS(buf []byte) int {
 	{
 		length := len(v.Str)
 		{
-			uv := uint64(length<<1) ^ uint64(length>>63)
+			uv := uint64(length)
+			if length < 0 {
+				uv = ^(uv << 1)
+			} else {
+				uv = uv << 1
+			}
 			{
 				for uv >= 0x80 {
 					buf[i] = byte(uv) | 0x80
@@ -74,7 +79,11 @@ func (v *MyInnerStruct) UnmarshalMUS(buf []byte) (int, error) {
 					return i, errs.ErrSmallBuf
 				}
 			}
-			uv = (uv >> 1) ^ uint64((int(uv&1)<<63)>>63)
+			if uv&1 == 1 {
+				uv = ^(uv >> 1)
+			} else {
+				uv = uv >> 1
+			}
 			length = int(uv)
 		}
 		if length < 0 {

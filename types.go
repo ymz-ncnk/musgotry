@@ -3,6 +3,7 @@ package musgotest
 import (
 	"errors"
 	"strconv"
+	"time"
 
 	"github.com/ymz-ncnk/musgotest/pkg"
 )
@@ -28,6 +29,9 @@ type MyStruct struct {
 
 	// Private fields are handled as well.
 	number *int
+
+	// It's better to use raw encoding for int time representation.
+	time int64 `mus:"#raw"`
 }
 
 // MyInnerStruct is a custom structure. It's a part of the MyStruct.
@@ -45,6 +49,7 @@ func NewMyStruct(ist *MyInnerStruct, m pkg.MyMap, str string,
 		Map:           m,
 		Str:           str,
 		number:        number,
+		time:          time.Now().UnixNano(),
 	}
 }
 
