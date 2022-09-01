@@ -31,7 +31,8 @@ type MyStruct struct {
 	number *int
 
 	// It's better to use raw encoding for int time representation.
-	time int64 `mus:"#raw"`
+	time  int64   `mus:"#raw"`
+	money float32 `mus:"#raw"`
 }
 
 // MyInnerStruct is a custom structure. It's a part of the MyStruct.
@@ -43,13 +44,14 @@ type MyInnerStruct struct {
 
 // NewMyStruct returns a new MyStruct.
 func NewMyStruct(ist *MyInnerStruct, m pkg.MyMap, str string,
-	number *int) MyStruct {
+	number *int, money float32) MyStruct {
 	return MyStruct{
 		MyInnerStruct: ist,
 		Map:           m,
 		Str:           str,
 		number:        number,
 		time:          time.Now().UnixNano(),
+		money:         money,
 	}
 }
 

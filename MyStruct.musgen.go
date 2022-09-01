@@ -1,6 +1,7 @@
 package musgotest
 
 import (
+	"math"
 	"unsafe"
 
 	"github.com/ymz-ncnk/musgo/errs"
@@ -39,6 +40,13 @@ func (v MyStruct) MarshalMUS(buf []byte) int {
 		{
 			*(*int64)(unsafe.Pointer(&buf[i])) = v.time
 			i += 8
+		}
+	}
+	{
+		uv := math.Float32bits(float32(v.money))
+		{
+			*(*uint32)(unsafe.Pointer(&buf[i])) = uv
+			i += 4
 		}
 	}
 	return i
@@ -122,6 +130,20 @@ func (v *MyStruct) UnmarshalMUS(buf []byte) (int, error) {
 	if err != nil {
 		return i, errs.NewFieldError("time", err)
 	}
+	{
+		var uv uint32
+		{
+			if len(buf) < 4 {
+				return i, errs.ErrSmallBuf
+			}
+			uv = *(*uint32)(unsafe.Pointer(&buf[i]))
+			i += 4
+		}
+		v.money = float32(math.Float32frombits(uv))
+	}
+	if err != nil {
+		return i, errs.NewFieldError("money", err)
+	}
 	return i, err
 }
 
@@ -151,6 +173,13 @@ func (v MyStruct) SizeMUS() int {
 			_ = v.time
 			size += 8
 		}
+	}
+	{
+		{
+			_ = v.money
+			size += 4
+		}
+
 	}
 	return size
 }

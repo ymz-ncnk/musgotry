@@ -2,6 +2,7 @@
 package musgotest
 
 import (
+	"math/rand"
 	"reflect"
 	"testing"
 
@@ -111,5 +112,6 @@ func makeMyStruct(ivalidInnerStruct bool, invalidMap bool) MyStruct {
 		m["two"] = "5"
 	}
 	number := 4
-	return NewMyStruct(&ist, m, "bird", &number)
+	money := rand.Float32()
+	return NewMyStruct(&ist, m, "bird", &number, money)
 }
