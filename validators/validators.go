@@ -2,28 +2,31 @@ package validators
 
 import "errors"
 
-// General purpose validators.
+var ErrNegative = errors.New("negative")
+var ErrEmpty = errors.New("empty")
+var ErrKeySumNegative = errors.New("keys sum negative")
 
-// ErrBiggerThenTen is an validation error, happens when integer is bigger
-// then ten.
-var ErrBiggerThenTen = errors.New("bigger then ten")
-
-// ErrHelloString is an validation error, happens when string is equal to
-// "hello".
-var ErrHelloString = errors.New("hello string")
-
-// BiggerThenTen checks if number is bigger then ten.
-func BiggerThenTen(number int) error {
-	if number > 10 {
-		return ErrBiggerThenTen
+func Positive(n int) error {
+	if n < 0 {
+		return ErrNegative
 	}
 	return nil
 }
 
-// NotHello checks if str is equal to "hello".
-func NotHello(str string) error {
-	if str == "hello" {
-		return ErrHelloString
+func NotEmpty(s string) error {
+	if s == "" {
+		return ErrEmpty
+	}
+	return nil
+}
+
+func KeysSumPositive(m map[int]string) error {
+	sum := 0
+	for k := range m {
+		sum = sum + k
+	}
+	if sum < 0 {
+		return ErrKeySumNegative
 	}
 	return nil
 }

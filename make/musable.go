@@ -1,4 +1,4 @@
-// +build ignore
+//go:build ignore
 
 package main
 
@@ -6,79 +6,84 @@ import (
 	"reflect"
 
 	"github.com/ymz-ncnk/musgo"
-	"github.com/ymz-ncnk/musgotest"
-	"github.com/ymz-ncnk/musgotest/pkg"
-	mypkg "github.com/ymz-ncnk/musgotest/pkgpath"
+	"github.com/ymz-ncnk/musgotry/pkg1"
+	"github.com/ymz-ncnk/musgotry/pkg2"
+	"github.com/ymz-ncnk/musgotry/pkg3"
 )
 
-// main adds MUS format support for MyStruct. Note, generated files should be
-// placed in the right places. Files for musgotest.MyStruct - in 'musgotest'
-// package, for pkg.MyStrSlice - in 'pkg', and so on...
 func main() {
 	musGo, err := musgo.New()
 	if err != nil {
 		panic(err)
 	}
 	{
-		var v musgotest.MyStruct
-		err := musGo.Generate(reflect.TypeOf(v), true)
-		if err != nil {
-			panic(err)
-		}
-	}
-	{
-		var v pkg.MyMap
+		// Sets Validator, MaxLength and ElemValidator for pkg1.ValidMapAlias type.
+		var v pkg1.ValidMapAlias
 		conf := musgo.NewAliasConf()
 		conf.T = reflect.TypeOf(v)
-		conf.Validator = "ValidateMyMap"
+		conf.Validator = "KeySumPositive"
 		conf.MaxLength = 3
-		conf.ElemValidator = "validators.NotHello"
-		conf.KeyValidator = "validators.NotHello"
-		conf.Path = "./pkg"
+		conf.ElemValidator = "validators.NotEmpty"
+		conf.Path = "./pkg1"
 		err := musGo.GenerateAliasAs(conf)
 		if err != nil {
 			panic(err)
 		}
 	}
 	{
-		var v musgotest.MyInnerStruct
-		err := musGo.Generate(reflect.TypeOf(v), false)
-		if err != nil {
-			panic(err)
-		}
-	}
-	{
-		var v pkg.MyInt
-		// Specifies validator for the alias type.
+		// Sets Validator for pkg1.ValidIntAlias type.
+		var v pkg1.ValidIntAlias
 		conf := musgo.NewAliasConf()
 		conf.T = reflect.TypeOf(v)
-		conf.Validator = "ValidateMyInt"
-		conf.Path = "./pkg"
+		conf.Validator = "Positive"
+		conf.Path = "./pkg1"
 		err := musGo.GenerateAliasAs(conf)
 		if err != nil {
 			panic(err)
 		}
 	}
 	{
-		// In this case the pkg name differs from the last folder of the pkg path.
-		var v mypkg.MyByte
+		// Generates Marshal, Unmarshal, Size methods for pkg2.ByteAlias type.
+		var v pkg2.ByteAlias
 		conf := musgo.NewConf()
 		conf.T = reflect.TypeOf(v)
-		conf.Path = "./pkgpath"
+		conf.Path = "./pkg2"
 		err := musGo.GenerateAs(conf)
 		if err != nil {
 			panic(err)
 		}
 	}
 	{
-		// In this case the pkg name differs from the last folder of the pkg path.
-		var v mypkg.MyByte
+		// Specifies custom suffix for Marshal, Unmarshal, Size methods of the
+		// pkg2.ByteAlias type.
+		var v pkg2.ByteAlias
 		conf := musgo.NewConf()
 		conf.T = reflect.TypeOf(v)
-		conf.Suffix = "AMUS"
-		conf.Path = "./pkgpath"
-		conf.Filename = "CustomSuffixMyByte.musgen.go"
-		// err := musGo.GenerateAs(reflect.TypeOf(v), false, "./pkgpath", "")
+		conf.Suffix = "CUSTOM"
+		conf.Path = "./pkg2"
+		conf.Filename = "CustomSuffixByteAlias.musgen.go"
+		err := musGo.GenerateAs(conf)
+		if err != nil {
+			panic(err)
+		}
+	}
+	{
+		// Generates Marshal, Unmarshal, Size methods for pkg3.Struct type.
+		var v pkg3.Struct
+		conf := musgo.NewConf()
+		conf.T = reflect.TypeOf(v)
+		conf.Path = "./pkg3"
+		err := musGo.GenerateAs(conf)
+		if err != nil {
+			panic(err)
+		}
+	}
+	{
+		// Generates Marshal, Unmarshal, Size methods for pkg3.InnerStruct type.
+		var v pkg3.InnerStruct
+		conf := musgo.NewConf()
+		conf.T = reflect.TypeOf(v)
+		conf.Path = "./pkg3"
 		err := musGo.GenerateAs(conf)
 		if err != nil {
 			panic(err)
